@@ -1,0 +1,79 @@
+/**
+ * @file        core/style.css
+ * @summary     8051 Çekirdek Simülatörü'nün görünümü: üç sütunlu tek sayfa.
+ * @author      Sercan Sebetçi <sercan.sebetci@ogr.sakarya.edu.tr>
+ * @copyright   2026 Sercan Sebetçi
+ * @license     MIT
+ * @version     1.0.0 (2026-11-15)
+ */
+
+/* === GENEL KULLANIM === */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; font-size: 14px; color: #1e293b; background: #f1f5f9; }
+code, textarea, .mono, table.mem, #listing, #regs td, #decode, #log { font-family: Consolas, "Cascadia Mono", monospace; }
+h1 { margin: 0 0 10px; font-size: 20px; }
+h1 small, h2 small { font-weight: 400; color: #64748b; font-size: 12px; margin-left: 8px; }
+h2 { margin: 0 0 8px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+
+/* === ÜST ŞERİT - AŞAMA BUTONLARI === */
+header { background: #fff; border-bottom: 1px solid #cbd5e1; padding: 12px 16px; }
+.flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.stage { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.stage > span { font-family: Consolas, monospace; font-size: 11px; color: #64748b; }
+.stage.cycle { border: 1px dashed #c2410c; border-radius: 10px; padding: 6px 10px; }
+.cycleBtns { display: flex; align-items: center; gap: 8px; }
+.cycleNote { font-size: 11px; color: #c2410c; }
+.arrow { color: #94a3b8; font-size: 18px; }
+.extra { display: flex; gap: 6px; margin-left: 12px; }
+button { font: inherit; padding: 7px 14px; border: 1px solid #94a3b8; border-radius: 8px; background: #fff; cursor: pointer; }
+button:disabled { opacity: .4; cursor: default; }
+button:not(:disabled):hover { background: #eff6ff; }
+.stage.next button { background: #2563eb; color: #fff; border-color: #2563eb; }
+.stage.done button { background: #dcfce7; border-color: #16a34a; }
+
+/* === SÜTUNLAR VE PANELLER === */
+main { display: grid; grid-template-columns: 1.05fr 1fr 1.15fr; gap: 12px; padding: 12px; }
+.col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.panel { background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 12px; }
+.scroll { max-height: 330px; overflow: auto; }
+textarea { width: 100%; height: 250px; font-size: 13px; line-height: 1.5; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; resize: vertical; tab-size: 8; }
+select { font: inherit; font-size: 12px; margin-left: auto; }
+#errors div { color: #b91c1c; font-size: 13px; margin-top: 4px; }
+#errors .ok { color: #15803d; }
+
+/* === TABLOLAR === */
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th { text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding: 3px 6px; }
+td { border-bottom: 1px solid #f1f5f9; padding: 3px 6px; vertical-align: top; }
+#listing td.notes { color: #64748b; font-size: 11.5px; font-family: "Segoe UI", Arial, sans-serif; }
+#listing tr.cur td { background: #fef3c7; }
+#listing tr.pcRow td:first-child::before { content: "PC→ "; color: #7c3aed; font-weight: 700; }
+#symbols { margin-top: 6px; font-size: 12px; color: #475569; }
+#regs td.v { font-weight: 700; }
+#regs tr.chg td { background: #fef3c7; }
+#regs td.bits { color: #64748b; font-size: 11.5px; }
+
+/* === BELLEK IZGARALARI === */
+table.mem { font-size: 11.5px; table-layout: fixed; }
+table.mem th { text-align: center; padding: 1px; font-weight: 400; }
+table.mem td { text-align: center; padding: 2px 0; border: 1px solid #f1f5f9; }
+table.mem td.empty { color: #cbd5e1; }
+table.mem td.ir { background: #dbeafe; font-weight: 700; }
+table.mem td.pc { outline: 2px solid #7c3aed; outline-offset: -2px; }
+table.mem td.rn { background: #f1f5f9; }
+table.mem td.sp { outline: 2px solid #2563eb; outline-offset: -2px; }
+table.mem td.chg { background: #fde68a; font-weight: 700; }
+.key { display: inline-block; padding: 0 5px; border-radius: 4px; font-size: 11px; }
+.pcK { outline: 2px solid #7c3aed; } .irK { background: #dbeafe; } .rK { background: #f1f5f9; } .spK { outline: 2px solid #2563eb; } .chK { background: #fde68a; }
+
+/* === KOMUT ÇÖZÜMÜ VE AÇIKLAMA === */
+#decode .irBytes { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+#decode .byte { border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 8px; min-width: 92px; }
+#decode .byte b { font-size: 18px; display: block; }
+#decode .byte small { color: #64748b; display: block; }
+#decode .fmt { font-size: 15px; font-weight: 700; color: #c2410c; }
+#decode .muted, .muted { color: #94a3b8; font-family: "Segoe UI", Arial, sans-serif; }
+#log { margin: 0; padding-left: 22px; line-height: 1.7; font-size: 13px; }
+#logTitle code { color: #c2410c; font-size: 13px; }
+.halt { color: #15803d; font-weight: 700; }
+.err { color: #b91c1c; font-weight: 700; }

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!--
+  @file        core/index.html
+  @summary     8051 Çekirdek Simülatörü: derleme ve getir–çöz–yürüt aşamalarını tek tek, elle işleten öğretim aracı.
+  @description Ana uygulamadan (../index.html) bağımsızdır. Amaç, bir assembly satırının nasıl makine koduna
+               dönüştüğünü ve işlemcinin bu kodu nasıl işlettiğini adım adım göstermektir.
+               Dosyalar ve görevleri:
+                 js/cpu.js        işlemcinin parçaları: flash, RAM, SFR, PC, IR
+                 js/opcodes.js    opcode tablosu: opcode, uzunluk, işlemciye etki
+                 js/assembler.js  derleme: kaynak kod → makine kodu
+                 js/emulator.js   flash'a yükleme, reset, getir (fetch), çöz (decode), yürüt (execute)
+                 js/ui.js         ekran ve düğmeler (hesap yapmaz)
+  @author      Sercan Sebetçi <sercan.sebetci@ogr.sakarya.edu.tr>
+  @copyright   2026 Sercan Sebetçi
+  @license     MIT
+  @version     1.0.0 (2026-11-15)
+-->
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>8051 Çekirdek Simülatörü</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>8051 Çekirdek Simülatörü <small>derleme ve getir – çöz – yürüt, adım adım</small></h1>
+  <!-- === Akış: her aşama bir düğme; altında o aşamayı yapan dosya ve fonksiyon yazar === -->
+  <div class="flow">
+    <div class="stage" id="stCompile"><button id="bCompile">1 · Derle</button><span>assembler.js · assemble()</span></div>
+    <div class="arrow">→</div>
+    <div class="stage" id="stLoad"><button id="bLoad">2 · Flash'a Yükle</button><span>emulator.js · loadProgram()</span></div>
+    <div class="arrow">→</div>
+    <div class="stage" id="stReset"><button id="bReset">3 · Reset</button><span>emulator.js · resetCpu()</span></div>
+    <div class="arrow">→</div>
+    <div class="stage cycle">
+      <div class="cycleBtns">
+        <div class="stage" id="stFetch"><button id="bFetch">4 · Getir</button><span>fetch()</span></div>
+        <div class="arrow">→</div>
+        <div class="stage" id="stDecode"><button id="bDecode">5 · Çöz</button><span>decode()</span></div>
+        <div class="arrow">→</div>
+        <div class="stage" id="stExec"><button id="bExec">6 · Yürüt</button><span>execute()</span></div>
+      </div>
+      <span class="cycleNote">↻ her komut için tekrarlanır · emulator.js</span>
+    </div>
+    <div class="extra">
+      <button id="bStep" title="Getir + Çöz + Yürüt">Tam Adım ⏭</button>
+      <button id="bBack" title="Bir önceki aşamaya dön">⏮ Geri</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- === Sol: kaynak kod ve derleme listesi === -->
+  <section class="col">
+    <div class="panel">
+      <h2>Kaynak Kod <select id="selExample"><option value="">Örnek yükle…</option></select></h2>
+      <textarea id="src" spellcheck="false"></textarea>
+      <div id="errors"></div>
+    </div>
+    <div class="panel">
+      <h2>Derleme Listesi <small>assembler'ın çıktısı</small></h2>
+      <div class="scroll"><table id="listing"></table></div>
+      <div id="symbols"></div>
+    </div>
+  </section>
+
+  <!-- === Orta: komut çözümü ve aşamanın açıklaması === -->
+  <section class="col">
+    <div class="panel">
+      <h2>IR ve Komut Çözümü</h2>
+      <div id="decode"></div>
+    </div>
+    <div class="panel">
+      <h2 id="logTitle">Bu Aşamada Ne Oldu?</h2>
+      <ol id="log"></ol>
+    </div>
+  </section>
+
+  <!-- === Sağ: register'lar, flash ve RAM === -->
+  <section class="col">
+    <div class="panel">
+      <h2>Register'lar <small>SFR adresleriyle</small></h2>
+      <table id="regs"></table>
+    </div>
+    <div class="panel">
+      <h2>Flash (Program Belleği) <small><span class="key pcK">PC</span> sıradaki byte · <span class="key irK">IR</span> getirilen komut</small></h2>
+      <table id="flash" class="mem"></table>
+    </div>
+    <div class="panel">
+      <h2>Dahili RAM 00h–7Fh <small><span class="key rK">R0–R7</span> <span class="key spK">SP</span> <span class="key chK">değişen</span></small></h2>
+      <table id="ram" class="mem"></table>
+    </div>
+  </section>
+</main>
+
+<!-- === Yükleme sırası: önce işlemci ve opcode tablosu, sonra onları kullanan assembler ve emülatör, en son ekran === -->
+<script src="js/cpu.js"></script>
+<script src="js/opcodes.js"></script>
+<script src="js/assembler.js"></script>
+<script src="js/emulator.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
