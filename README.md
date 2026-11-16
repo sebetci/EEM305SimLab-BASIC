@@ -6,7 +6,7 @@ An interactive learning environment for the MCS-51 (8051) architecture. Run each
 
 ## Quick Start
 
-- **Open in your browser:** https://sebetci.github.io/EEM305SimLab-BASIC/EEM305SimLab-BASIC.html
+- **Open in your browser:** [https://sebetci.github.io/EEM305SimLab-BASIC/EEM305SimLab-BASIC.html](https://sebetci.github.io/EEM305SimLab-BASIC/core/)
 
 ## Features
 
